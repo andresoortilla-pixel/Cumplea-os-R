@@ -632,20 +632,17 @@ function startContinuousStreamers() {
     // CELULAR: el texto de cada hoja se ajusta para que se lea completo
     // ==========================================
     function fitPageTexts() {
-        if (innerWidth >= 720) return;
-        document.querySelectorAll('.diary-page').forEach(pg => {
-            const t = pg.querySelector('.page-text'), fr = pg.querySelector('.photo-frame'); if (!t) return;
-            t.style.fontSize = ''; t.style.lineHeight = ''; if (fr) fr.style.height = '';
-            let fs = parseFloat(getComputedStyle(t).fontSize), fh = fr ? fr.offsetHeight : 0; const fh0 = fh;
-            const over = () => t.scrollHeight > t.clientHeight + 1;
-            const setF = () => { t.style.fontSize = fs + 'px'; t.style.lineHeight = (fs * 1.3) + 'px'; };
-            while (over() && fs > 9.5) { fs -= 0.5; setF(); }                                   // 1º achica la letra un poco
-            while (over() && fr && fh > fh0 * 0.62) { fh -= 4; fr.style.height = fh + 'px'; }   // 2º la foto (se ve completa igual)
-            while (over() && fs > 8) { fs -= 0.5; setF(); }                                     // 3º último recurso
+        // El texto ya no se encoge: se lee en tamaño grande y se desliza hacia abajo dentro de la hoja.
+        document.querySelectorAll('.diary-page .page-text').forEach(t => {
+            t.style.fontSize = ''; t.style.lineHeight = '';
+            if (!t.dataset.more) { t.dataset.more = '1'; t.addEventListener('scroll', () => markMore(t), { passive: true }); }
+            markMore(t);
         });
     }
+    function markMore(t) { t.classList.toggle('has-more', t.scrollHeight - t.scrollTop - t.clientHeight > 4); }  // difumina el borde si hay más texto abajo
     new MutationObserver(() => { if (document.body.classList.contains('diary-open')) setTimeout(fitPageTexts, 120); })
         .observe(document.body, { attributes: true, attributeFilter: ['class'] });
+    fitPageTexts();
     addEventListener('resize', () => setTimeout(fitPageTexts, 150));
     addEventListener('orientationchange', () => setTimeout(fitPageTexts, 300));
 });
