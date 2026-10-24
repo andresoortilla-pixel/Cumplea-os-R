@@ -310,3 +310,8 @@ html, body { max-width: 100%; overflow-x: hidden; }
 }
 /* el texto escrito reserva su espacio desde el inicio: nada se desplaza */
 .tw-off { visibility: hidden; }
+
+/* ---- Diario fijo: sin desplazamientos laterales ni scroll del navegador ---- */
+#diary-modal { overflow: hidden; touch-action: none; overscroll-behavior: contain; }
+.modal-overlay { overflow-x: hidden; }
+.page-controls { z-index: 120; }
