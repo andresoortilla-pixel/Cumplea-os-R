@@ -286,6 +286,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const bookInside = book ? book.querySelector('.book-inside') : null;
         const controls = document.querySelector('.page-controls');
         if (!book || !bookCover || !coverBack || !bookInside || !pages.length) return;
+        if (controls && controls.parentElement !== diaryModal) diaryModal.appendChild(controls);
 
         const N = pages.length;
         const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
@@ -576,6 +577,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // reserva desde el inicio el espacio del mensaje completo (invisible) para que nada se mueva
         cakeMessage.innerHTML = '<span class="tw-off"></span>'; cakeMessage.firstChild.textContent = text;
         setTimeout(() => {
+            stopContinuousStreamers();
             typeWriterEffect(cakeMessage, text, 45, () => {
                 if (btnFinalGift) btnFinalGift.classList.remove('hidden');
             });
@@ -603,6 +605,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==========================================
     if (btnFinalGift) {
         btnFinalGift.addEventListener('click', () => {
+            stopContinuousStreamers();
             cakeModal.classList.add('hidden');
             finalGiftModal.classList.remove('hidden');
         });
