@@ -280,3 +280,33 @@ body.diary-open #scene-3 *::after { animation-play-state: paused !important; }
 .nav-page-btn:active:not(:disabled) { transform: translateY(2px); box-shadow: 0 1px 0 var(--ink); }
 .nav-page-btn:disabled { opacity: 1; background: #f8c3cf; color: #fff; border-color: #b6a3a9; box-shadow: 0 3px 0 #b6a3a9; cursor: not-allowed; }
 #page-indicator { font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 1rem; color: var(--ink); min-width: 3.4em; text-align: center; }
+
+/* =====================================================
+   ADAPTACIÓN A CELULAR
+===================================================== */
+html, body { max-width: 100%; overflow-x: hidden; }
+#scene-3 { overflow: hidden; }                 /* nada se sale del ancho de la pantalla */
+.modal-overlay { overflow-y: auto; -webkit-overflow-scrolling: touch; align-items: safe center; }
+
+@media (max-width: 719px) {
+  /* diario: una página a la vez, centrada y completa */
+  .book { --bw: min(330px, 84vw, calc((100dvh - 150px) / 1.42)); }
+  .page-text { font-size: calc(var(--bw) * .06); line-height: 1.32; }
+  .page-header { font-size: calc(var(--bw) * .078); }
+  .photo-frame { height: calc(var(--bw) * .5); }
+  .page-controls { gap: .5rem; padding: .4rem .5rem; bottom: max(12px, env(safe-area-inset-bottom)); position: fixed; }
+  .nav-page-btn { padding: .45rem .9rem; font-size: .9rem; }
+  .close-modal-btn { top: 10px; right: 12px; }
+
+  /* pastel y carta final: caben en pantalla y no saltan */
+  .cake-stage, .final-card { padding: 1.2rem 1rem; width: 100%; max-width: 440px; margin: auto; }
+  .cake-title { font-size: 1.5rem; margin-bottom: .8rem; }
+  .cake-builder { transform: scale(.85); transform-origin: 50% 100%; margin-bottom: .2rem; }
+  .cake-msg-text { font-size: .98rem; margin-bottom: .8rem; }
+  .final-icon { font-size: 2.3rem; margin-bottom: .4rem; }
+  .final-card h3 { font-size: 1.45rem; margin-bottom: .6rem; }
+  .final-letter { font-size: .97rem; line-height: 1.5; margin-bottom: .9rem; }
+  .whatsapp-btn { font-size: 1.05rem; padding: 12px 22px; }
+}
+/* el texto escrito reserva su espacio desde el inicio: nada se desplaza */
+.tw-off { visibility: hidden; }

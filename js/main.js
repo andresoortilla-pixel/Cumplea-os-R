@@ -572,8 +572,10 @@ document.addEventListener('DOMContentLoaded', () => {
             }, (index + 1) * 700);
         });
 
+        const text = "¡Feliz vuelta al sol! 🎂✨ Que este nuevo año de vida te regale momentos increíbles, risas infinitas y mucha felicidad... Pero espera, aún falta una última sorpresa para ti:";
+        // reserva desde el inicio el espacio del mensaje completo (invisible) para que nada se mueva
+        cakeMessage.innerHTML = '<span class="tw-off"></span>'; cakeMessage.firstChild.textContent = text;
         setTimeout(() => {
-            const text = "¡Feliz vuelta al sol! 🎂✨ Que este nuevo año de vida te regale momentos increíbles, risas infinitas y mucha felicidad... Pero espera, aún falta una última sorpresa para ti:";
             typeWriterEffect(cakeMessage, text, 45, () => {
                 if (btnFinalGift) btnFinalGift.classList.remove('hidden');
             });
@@ -582,12 +584,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function typeWriterEffect(element, text, speed, callback) {
         if (!element) return;
-        element.textContent = "";
-        let i = 0;
+        // Se escribe sobre el texto completo (invisible) para que el recuadro nunca cambie de altura
+        element.innerHTML = '<span class="tw-on"></span><span class="tw-off"></span>';
+        const on = element.firstChild, off = element.lastChild;
+        off.textContent = text; let i = 0;
         const timer = setInterval(() => {
             if (i < text.length) {
-                element.textContent += text.charAt(i);
-                i++;
+                i++; on.textContent = text.slice(0, i); off.textContent = text.slice(i);
             } else {
                 clearInterval(timer);
                 if (callback) callback();
@@ -611,4 +614,22 @@ document.addEventListener('DOMContentLoaded', () => {
             stopContinuousStreamers();
         });
     }
+
+    // ==========================================
+    // CELULAR: el texto de cada hoja se ajusta para que se lea completo
+    // ==========================================
+    function fitPageTexts() {
+        if (innerWidth >= 720) return;
+        document.querySelectorAll('.diary-page .page-text').forEach(t => {
+            t.style.fontSize = ''; t.style.lineHeight = '';
+            let fs = parseFloat(getComputedStyle(t).fontSize);
+            while (t.scrollHeight > t.clientHeight + 1 && fs > 9) {
+                fs -= 0.5; t.style.fontSize = fs + 'px'; t.style.lineHeight = (fs * 1.3) + 'px';
+            }
+        });
+    }
+    new MutationObserver(() => { if (document.body.classList.contains('diary-open')) setTimeout(fitPageTexts, 120); })
+        .observe(document.body, { attributes: true, attributeFilter: ['class'] });
+    addEventListener('resize', () => setTimeout(fitPageTexts, 150));
+    addEventListener('orientationchange', () => setTimeout(fitPageTexts, 300));
 });
