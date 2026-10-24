@@ -510,6 +510,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             }
 
+            streamFire = getFire('cake', cakeModal);
             startContinuousStreamers();
 
             if (!cakeBuilt) {
@@ -528,17 +529,25 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    function startContinuousStreamers() {
+        // Serpentinas en un lienzo propio dentro de cada ventana, DETRÁS de la tarjeta (no tapan el texto)
+    let streamFire = safeConfetti; const fires = {};
+    function getFire(key, modal) {
+        if (fires[key]) return fires[key];
+        if (typeof confetti !== 'function' || !confetti.create || !modal) return safeConfetti;
+        const cv = document.createElement('canvas'); cv.className = 'confetti-layer'; modal.prepend(cv);
+        return (fires[key] = confetti.create(cv, { resize: true, useWorker: false }));
+    }
+function startContinuousStreamers() {
         if (confettiInterval) clearInterval(confettiInterval);
         confettiInterval = setInterval(() => {
-            safeConfetti({
+            streamFire({
                 particleCount: 15,
                 angle: 60,
                 spread: 55,
                 origin: { x: 0, y: 0.65 },
                 colors: ['#ff6b8b', '#ffe89e', '#70a1ff', '#7bed9f']
             });
-            safeConfetti({
+            streamFire({
                 particleCount: 15,
                 angle: 120,
                 spread: 55,
@@ -577,7 +586,6 @@ document.addEventListener('DOMContentLoaded', () => {
         // reserva desde el inicio el espacio del mensaje completo (invisible) para que nada se mueva
         cakeMessage.innerHTML = '<span class="tw-off"></span>'; cakeMessage.firstChild.textContent = text;
         setTimeout(() => {
-            stopContinuousStreamers();
             typeWriterEffect(cakeMessage, text, 45, () => {
                 if (btnFinalGift) btnFinalGift.classList.remove('hidden');
             });
@@ -608,6 +616,8 @@ document.addEventListener('DOMContentLoaded', () => {
             stopContinuousStreamers();
             cakeModal.classList.add('hidden');
             finalGiftModal.classList.remove('hidden');
+            streamFire = getFire('final', finalGiftModal);
+            startContinuousStreamers();
         });
     }
 
@@ -623,12 +633,15 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==========================================
     function fitPageTexts() {
         if (innerWidth >= 720) return;
-        document.querySelectorAll('.diary-page .page-text').forEach(t => {
-            t.style.fontSize = ''; t.style.lineHeight = '';
-            let fs = parseFloat(getComputedStyle(t).fontSize);
-            while (t.scrollHeight > t.clientHeight + 1 && fs > 9) {
-                fs -= 0.5; t.style.fontSize = fs + 'px'; t.style.lineHeight = (fs * 1.3) + 'px';
-            }
+        document.querySelectorAll('.diary-page').forEach(pg => {
+            const t = pg.querySelector('.page-text'), fr = pg.querySelector('.photo-frame'); if (!t) return;
+            t.style.fontSize = ''; t.style.lineHeight = ''; if (fr) fr.style.height = '';
+            let fs = parseFloat(getComputedStyle(t).fontSize), fh = fr ? fr.offsetHeight : 0; const fh0 = fh;
+            const over = () => t.scrollHeight > t.clientHeight + 1;
+            const setF = () => { t.style.fontSize = fs + 'px'; t.style.lineHeight = (fs * 1.3) + 'px'; };
+            while (over() && fs > 9.5) { fs -= 0.5; setF(); }                                   // 1º achica la letra un poco
+            while (over() && fr && fh > fh0 * 0.62) { fh -= 4; fr.style.height = fh + 'px'; }   // 2º la foto (se ve completa igual)
+            while (over() && fs > 8) { fs -= 0.5; setF(); }                                     // 3º último recurso
         });
     }
     new MutationObserver(() => { if (document.body.classList.contains('diary-open')) setTimeout(fitPageTexts, 120); })
