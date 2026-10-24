@@ -1,0 +1,145 @@
+/* ===== Canvas del túnel ===== */
+#warp{position:fixed;inset:0;z-index:60;display:none;pointer-events:none;background:#03020c}
+#warp.on{display:block}
+
+/* ===== Regalo 3D ===== */
+.custom-gift{perspective:900px;animation:idle 3.2s ease-in-out infinite}
+@keyframes idle{50%{transform:translateY(-8px)}}
+.g3d{position:absolute;left:50%;top:50%;width:0;height:0;margin-top:-20px;transform-style:preserve-3d;transform-origin:0 55px;animation:spin 10s linear infinite}
+@keyframes spin{from{transform:rotateX(-22deg) rotateY(0)}to{transform:rotateX(-22deg) rotateY(360deg)}}
+.g3d .box,.g3d .lid{position:absolute;transform-style:preserve-3d}
+.g3d .box{left:-75px;top:0;width:150px;height:110px}
+.g3d .lid{left:-80px;top:-30px;width:160px;height:34px}
+.g3d .f{position:absolute;display:block;
+ --sat:linear-gradient(160deg,#ff5f83,#d41c50 55%,#9c0e35);
+ --rb:linear-gradient(90deg,transparent 41%,#b8841a 41%,#ffe58a 48%,#f2c744 52%,#b8841a 59%,transparent 59%);
+ background:var(--rb),repeating-linear-gradient(115deg,#fff1 0 2px,transparent 2px 5px),var(--sat);
+ box-shadow:inset 0 0 14px #0005}
+.box .f{width:150px;height:110px;left:0;top:0}
+.lid .f{width:160px;height:34px;left:0;top:0;box-shadow:inset 0 -6px 8px #0004,inset 0 3px 4px #fff5}
+.f.fr{transform:translateZ(75px)}.f.bk{transform:rotateY(180deg) translateZ(75px);filter:brightness(.7)}
+.f.lf{transform:rotateY(-90deg) translateZ(75px);filter:brightness(.8)}.f.rt{transform:rotateY(90deg) translateZ(75px);filter:brightness(.9)}
+.f.bt{transform:rotateX(-90deg) translateZ(55px);height:150px;top:-20px;background:#5c0a20}
+.lid .f.fr{transform:translateZ(80px)}.lid .f.bk{transform:rotateY(180deg) translateZ(80px)}
+.lid .f.lf{transform:rotateY(-90deg) translateZ(80px)}.lid .f.rt{transform:rotateY(90deg) translateZ(80px)}
+.lid .f.tp{height:160px;top:-63px;transform:rotateX(90deg) translateZ(17px);
+ background:var(--rb),linear-gradient(0deg,transparent 41%,#b8841a 41%,#ffe58a 48%,#f2c744 52%,#b8841a 59%,transparent 59%),var(--sat)}
+.lid .f.tp,.lid .f.fr{background-blend-mode:normal}
+/* lazo */
+.bow{position:absolute;left:80px;top:-34px;transform-style:preserve-3d}
+.bow b{position:absolute;width:50px;height:36px;left:-25px;top:-18px;border:8px solid #f2c744;border-radius:50%;
+ background:radial-gradient(#0003,transparent 70%);box-shadow:inset 0 0 6px #7a5200,0 3px 5px #0004}
+.bow b:nth-child(1){transform:translateX(-26px) rotateZ(-28deg)}
+.bow b:nth-child(2){transform:translateX(26px) rotateZ(28deg)}
+.bow b:nth-child(3){transform:translateX(-24px) rotateY(70deg) rotateZ(-28deg)}
+.bow b:nth-child(4){transform:translateX(24px) rotateY(70deg) rotateZ(28deg)}
+.bow u{position:absolute;width:22px;height:22px;left:-11px;top:-6px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff3b0,#e8b83a 60%,#9a6b0a)}
+.g3d .glow{position:absolute;left:-60px;top:-10px;width:120px;height:40px;border-radius:50%;background:#fff;filter:blur(14px);opacity:.25;transform:rotateX(90deg);box-shadow:0 0 60px 30px #ff2e63}
+.gshadow{position:absolute;bottom:-34px;left:50%;width:210px;height:34px;margin-left:-105px;border-radius:50%;background:radial-gradient(#000c,transparent 70%)}
+.custom-gift.charging .g3d{animation-duration:.6s}
+.custom-gift.detonate .g3d .box{animation:burst .6s ease-out forwards}
+.custom-gift.detonate .g3d .glow{opacity:1;transform:rotateX(90deg) scale(7);transition:all .5s}
+@keyframes burst{30%{transform:scale(1.25,.8);filter:brightness(2.5)}100%{transform:scale(1.6,.2) translateY(60px);opacity:0}}
+
+/* ===== Globos con brillo, nudo e hilo ===== */
+.balloon{border:0!important;border-radius:50% 50% 48% 48%/58% 58% 42% 42%;
+ background:radial-gradient(ellipse at 30% 24%,#fffd 0 6%,#fff0 14%),radial-gradient(circle at 38% 32%,#ff9db5,#ff4d78 58%,#b01f46);
+ box-shadow:inset -9px -12px 20px #0003,0 14px 18px #0002;transform-origin:50% 130%}
+.balloon::before{content:'';position:absolute;bottom:-8px;left:50%;margin-left:-6px;border:6px solid transparent;border-bottom:9px solid #b01f46;border-top:0}
+.balloon::after{width:1.5px!important;height:70px!important;bottom:-78px!important;background:linear-gradient(#5a3a44,#5a3a4400)!important;transform-origin:top;animation:sway 3s ease-in-out infinite alternate}
+@keyframes sway{from{transform:rotate(-7deg)}to{transform:rotate(7deg)}}
+.b-right-top{background:radial-gradient(ellipse at 30% 24%,#fffd 0 6%,#fff0 14%),radial-gradient(circle at 38% 32%,#fff0b0,#ffd23f 58%,#c99a0a)!important}
+.b-right-top::before{border-bottom-color:#c99a0a}
+.b-right-bottom{background:radial-gradient(ellipse at 30% 24%,#fffd 0 6%,#fff0 14%),radial-gradient(circle at 38% 32%,#b9e4ff,#5aa9ff 58%,#2663b3)!important}
+.b-right-bottom::before{border-bottom-color:#2663b3}
+@media (prefers-reduced-motion:reduce){.g3d,.custom-gift,.balloon,.balloon::after{animation:none!important}}
+
+/* ===== Pastel con glaseado, goteo y vela ===== */
+.cake-plate{width:240px;height:18px;border:0;border-radius:50%;background:linear-gradient(#fff,#aeb8c4 70%,#8893a0);box-shadow:0 10px 14px #0004}
+.cake-tier-bottom,.cake-tier-middle,.cake-tier-top{border:0;border-radius:12px 12px 6px 6px;margin-bottom:-4px;
+ background:radial-gradient(circle at 12px 0,#fff 9px,#fff0 10px) 0 0/24px 22px repeat-x,
+ radial-gradient(#ffe066 1.6px,#0000 2.2px) 7px 30px/22px 16px,
+ linear-gradient(90deg,#0003,#0000 25%,#fff4 45%,#0000 70%,#0003),var(--c);box-shadow:0 6px 8px #0003}
+.cake-tier-bottom{--c:#e8577f;width:200px;height:56px}.cake-tier-middle{--c:#f48fb1;width:156px;height:50px}.cake-tier-top{--c:#ffc2d4;width:112px;height:44px}
+.cake-top-frosting{border:0;height:18px;background:radial-gradient(#fff,#ffd9e4);box-shadow:0 3px 4px #0003}
+.cake-candle{border:0;border-radius:3px;box-shadow:inset -3px 0 4px #0003}
+.cake-flame{width:14px;height:26px;border-radius:50% 50% 50% 50%/65% 65% 35% 35%;
+ background:radial-gradient(ellipse at 50% 82%,#4aa3ff 0 10%,#fff6b0 28%,#ffb020 65%,#ff6a00);box-shadow:0 0 18px 6px #ffb02088,0 0 40px 16px #ff6a0044}
+.cake-stage{background:radial-gradient(circle at 50% 0,#fff,#ffeaf0)}
+
+/* ===== Diario de cuero, hojas con renglones y cambio de página ===== */
+.cover-front,.cover-back{border:0;background:radial-gradient(circle at 28% 18%,#ff7d93,#c42a4a 65%,#8f1731);
+ box-shadow:inset 0 0 0 7px #0002,inset 0 0 0 9px #f2c74499,0 24px 40px #000a,inset 10px 0 14px -6px #0006}
+.cover-title{color:#f7d774;text-shadow:0 -1px 0 #fff7,0 2px 3px #0008}.cover-sub{color:#ffe9a8}
+.book-inside{border:0;background:repeating-linear-gradient(#fffaf2 0 27px,#f3cfd8 27px 28px),#fffaf2;color:#4a2a33;
+ box-shadow:inset 16px 0 20px -10px #0005,0 24px 40px #000a,5px 0 0 #efe3d6,8px 0 0 #d4c6b8,11px 0 0 #efe3d6}
+.page-header{color:var(--pink-dark)}
+.page-text{background:transparent;padding:4px 2px;line-height:28px}
+.photo-frame{position:relative;transform:rotate(-1.8deg);box-shadow:0 8px 14px #0003}
+.photo-frame::before{content:'';position:absolute;top:-10px;left:50%;width:70px;height:20px;margin-left:-35px;background:#ffe89ecc;transform:rotate(3deg);box-shadow:0 1px 2px #0002}
+.page-controls{border-top-color:#e04b6c55}
+.diary-page.active{transform-origin:left center;animation:pageFlip .7s cubic-bezier(.2,.8,.2,1)}
+@keyframes pageFlip{from{transform:perspective(900px) rotateY(-75deg);opacity:0}to{transform:none;opacity:1}}
+
+/* ===== Historia: "VAMOS" en pantalla negra ===== */
+#story{position:fixed;inset:0;z-index:55;background:#000;opacity:0;display:flex;align-items:center;justify-content:center;pointer-events:none;transition:opacity .9s}
+#story.on{opacity:1}
+#story h1{font-family:'Fredoka One',cursive;color:#fff;font-size:clamp(3.5rem,14vw,9rem);letter-spacing:.3em;margin-right:-.3em;
+ text-shadow:0 0 20px #ff2e63,0 0 60px #ffd32a;opacity:0;transform:scale(.85);transition:opacity .9s,transform 2s cubic-bezier(.2,.8,.2,1)}
+#story h1.on{opacity:1;transform:scale(1)}
+
+/* ===== Diario: hojas reales que giran sobre el lomo ===== */
+.book-inside{transform-style:preserve-3d}
+.diary-page{display:flex!important;position:absolute;inset:0;padding:1.2rem 1.2rem 3.8rem;height:auto;
+ transform-origin:left center;transform-style:preserve-3d;animation:none!important;
+ transform:translateZ(var(--z,0px)) rotateY(0deg);transition:transform 1.1s cubic-bezier(.45,.05,.25,1)}
+.diary-page.flipped{transform:translateZ(var(--z,0px)) rotateY(-180deg)}
+.diary-page>*{backface-visibility:hidden}
+.diary-page::before,.diary-page::after{content:'';position:absolute;inset:0;backface-visibility:hidden;border-radius:6px 14px 14px 6px}
+.diary-page::before{background:repeating-linear-gradient(#fffaf2 0 27px,#f3cfd8 27px 28px),#fffaf2;transform:translateZ(-.5px);
+ box-shadow:inset 14px 0 16px -10px #0004}
+.diary-page::after{transform:rotateY(180deg);border-radius:14px 6px 6px 14px;
+ background:linear-gradient(270deg,#0003,#0000 18%),repeating-linear-gradient(#f6ecdf 0 27px,#ebd5cf 27px 28px),#f6ecdf;box-shadow:inset -14px 0 16px -10px #0004}
+.page-controls{position:absolute;left:1.2rem;right:1.2rem;bottom:.9rem;transform:translateZ(60px);background:transparent}
+.nav-page-btn{transition:transform .15s}.nav-page-btn:active:not(:disabled){transform:scale(.92)}
+
+/* ===== Pantalla rosa: réplica de la referencia ===== */
+#scene-3{background-size:36px 36px}
+.bunting{top:0!important;gap:0!important;transform:none!important}
+.bunting-left{left:0!important}.bunting-right{right:0!important;transform:scaleX(-1)!important}
+.bunting span{display:none}
+.bunting svg{width:min(32vw,430px);height:auto;display:block;filter:drop-shadow(0 2px 0 #0001)}
+.word-happy{font-size:clamp(3.6rem,8.2vw,8rem)!important}
+.word-birthday{font-size:clamp(3.8rem,8.6vw,8.4rem)!important}
+.party-hat{border:0!important;width:1.45em;height:1.65em;top:-1.95em!important;right:.9em!important;
+ background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 110 125'%3E%3Cpath d='M55 16 L97 104 Q55 122 13 104 Z' fill='%23ff6b8b' stroke='%233a2229' stroke-width='4' stroke-linejoin='round'/%3E%3Cg fill='%23fff'%3E%3Ccircle cx='55' cy='42' r='3'/%3E%3Ccircle cx='45' cy='62' r='3'/%3E%3Ccircle cx='65' cy='62' r='3'/%3E%3Ccircle cx='36' cy='84' r='3'/%3E%3Ccircle cx='55' cy='84' r='3'/%3E%3Ccircle cx='74' cy='84' r='3'/%3E%3C/g%3E%3Cpath d='M9 100 Q55 130 101 100 Q101 112 55 122 Q9 112 9 100Z' fill='%231f2c3d' stroke='%233a2229' stroke-width='4' stroke-linejoin='round'/%3E%3Cg fill='%233a2229'%3E%3Crect x='49' y='3' width='12' height='12'/%3E%3Crect x='49' y='3' width='12' height='12' transform='rotate(45 55 9)'/%3E%3C/g%3E%3C/svg%3E") center/contain no-repeat;transform:rotate(24deg) scale(0);transform-origin:50% 90%}
+.party-hat.show{transform:rotate(24deg) scale(1)!important}
+.pom-pom{display:none}
+.pill-date{padding:8px 56px;font-style:italic;font-size:1.15rem}
+.pill-btn{font-size:.9rem;padding:8px 22px}
+.avatar-circle{width:clamp(240px,27vw,450px)!important;height:clamp(240px,27vw,450px)!important;overflow:visible!important;
+ background:#fff4f6;border:clamp(16px,2.3vw,34px) solid #f8dc8a!important;outline:3px solid #3a2229;box-shadow:inset 0 0 0 3px #3a2229!important}
+.avatar-circle img{position:absolute;left:-8%;bottom:-15%;width:116%;height:116%;object-fit:contain;z-index:3}
+.panda-fallback{position:relative;z-index:3}
+.pill-dear{width:72%;text-align:center;padding:5px 0!important;color:#3a2229!important;font-size:1.7rem!important;margin-top:-34px!important;z-index:6!important}
+/* globos planos con contorno, brillo de línea e hilo */
+.balloon{background:#f8959c!important;border:2.5px solid #3a2229!important;box-shadow:none!important;border-radius:50% 50% 48% 48%/55% 55% 45% 45%!important;transform-origin:50% 100%}
+.balloon::before{content:'';position:absolute;border:0;border-left:3px solid #3a2229;border-radius:50%;left:15%;top:14%;bottom:auto;margin:0;width:30%;height:52%;transform:rotate(-8deg)}
+.balloon::after{left:50%!important;bottom:-90px!important;width:26px!important;height:90px!important;background:none!important;border-right:2px solid #3a2229;border-radius:0 0 90% 0;animation:sway 3s ease-in-out infinite alternate}
+.b-left{width:clamp(60px,7.4vw,120px)!important;height:clamp(74px,9vw,146px)!important;top:-9%!important;left:-12%!important}
+.b-right-top{width:clamp(56px,6.6vw,106px)!important;height:clamp(56px,6.6vw,106px)!important;top:3%!important;right:-6%!important;border-radius:50%!important;background:#f5596f!important}
+.b-right-top::before{inset:7px;left:7px;top:7px;width:auto;height:auto;border:2px dashed #3a2229;border-radius:50%;transform:none}
+.b-right-top::after{display:none}
+.b-right-bottom{width:clamp(54px,6.4vw,100px)!important;height:clamp(68px,8vw,124px)!important;bottom:22%!important;right:-17%!important;background:#f5596f!important}
+.b-right-bottom::before{left:auto;right:15%;border-left:0;border-right:3px solid #3a2229;transform:rotate(8deg)}
+.b-right-bottom::after{border-right:0;border-left:2px solid #3a2229;border-radius:0 0 0 90%;left:auto!important;right:50%}
+/* estrellitas y stickers */
+.deco-star{display:none}
+.spark{position:absolute;width:14px;height:14px;z-index:1;opacity:0;animation:sparkIn .5s both,twinkle 2.4s ease-in-out infinite}
+.spark::before,.spark::after{content:'';position:absolute;inset:0;background:#3a2229}.spark::after{transform:rotate(45deg)}
+@keyframes sparkIn{from{opacity:0;scale:0}to{opacity:1;scale:1}}
+@keyframes twinkle{50%{rotate:45deg;scale:.75}}
+.sticker-blob{position:absolute;right:-70px;bottom:-70px;width:min(20vw,260px);animation:spinSlow 24s linear infinite}
+@keyframes spinSlow{to{transform:rotate(360deg)}}
+.sticker-smile{position:absolute;left:50%;bottom:3%;width:clamp(56px,6vw,100px);animation:bob 2.2s ease-in-out infinite alternate}
+@keyframes bob{from{transform:translateY(0) rotate(-6deg)}to{transform:translateY(-10px) rotate(6deg)}}

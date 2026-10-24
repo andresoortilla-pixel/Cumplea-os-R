@@ -1,0 +1,1272 @@
+/* ==========================================
+   VARIABLES Y RESET GENERAL
+=========================================== */
+:root {
+    --pink-bg: #fdf0f3;
+    --pink-grid: #f7dce2;
+    --pink-main: #ff6b8b;
+    --pink-dark: #e04b6c;
+    --card-red: #ff5c77;
+    --dark-outline: #3a2229;
+    --yellow-ring: #ffe89e;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Quicksand', sans-serif;
+    background-color: var(--pink-bg);
+    color: var(--dark-outline);
+    overflow: hidden;
+    width: 100vw;
+    height: 100vh;
+    user-select: none;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.scene {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.6s ease;
+}
+
+.scene.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* ==========================================
+   FASE 1: LA BROMA
+=========================================== */
+#scene-1 {
+    background: radial-gradient(circle, #fff5f8 0%, #fce4ec 100%);
+    z-index: 10;
+}
+
+.intro-box {
+    text-align: center;
+    padding: 2.5rem;
+    max-width: 600px;
+}
+
+#question-text {
+    font-family: 'Fredoka One', cursive;
+    font-size: clamp(2rem, 5vw, 3rem);
+    color: var(--pink-main);
+    text-shadow: 2px 2px 0px var(--dark-outline);
+    margin-bottom: 2rem;
+}
+
+.btn-group {
+    display: flex;
+    gap: 1.2rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.btn-primary, .btn-secondary {
+    padding: 14px 32px;
+    font-size: 1.15rem;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 700;
+    border: 3px solid var(--dark-outline);
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 5px 0 var(--dark-outline);
+    transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.btn-primary {
+    background-color: var(--pink-main);
+    color: #fff;
+}
+
+.btn-secondary {
+    background-color: #fff;
+    color: var(--dark-outline);
+}
+
+.btn-primary:hover, .btn-secondary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 0 var(--dark-outline);
+}
+
+.btn-primary:active, .btn-secondary:active {
+    transform: translateY(3px);
+    box-shadow: 0 2px 0 var(--dark-outline);
+}
+
+#joke-response h2 {
+    font-size: clamp(1.5rem, 4vw, 2.2rem);
+    color: var(--dark-outline);
+    margin-bottom: 1.5rem;
+    animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+#joke-gif {
+    max-width: 280px;
+    width: 85%;
+    border-radius: 16px;
+    border: 4px solid var(--dark-outline);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+/* ==========================================
+   EFECTO PANTALLA EN PEDAZOS (SHATTER)
+=========================================== */
+#shatter-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    pointer-events: none;
+    perspective: 1000px;
+}
+
+.shard {
+    position: absolute;
+    inset: 0;
+    background: #fce4ec;
+    border: 2px solid #fff;
+    transition: transform 1.2s cubic-bezier(0.55, 0.085, 0.68, 0.53), opacity 1.2s ease-in;
+}
+
+/* Polígonos que dividen la pantalla en 6 fragmentos */
+.shard.s1 { clip-path: polygon(0 0, 52% 0, 45% 48%, 0 40%); }
+.shard.s2 { clip-path: polygon(52% 0, 100% 0, 100% 45%, 45% 48%); }
+.shard.s3 { clip-path: polygon(0 40%, 45% 48%, 35% 100%, 0 100%); }
+.shard.s4 { clip-path: polygon(45% 48%, 100% 45%, 100% 100%, 65% 100%); }
+.shard.s5 { clip-path: polygon(45% 48%, 65% 100%, 35% 100%); }
+.shard.s6 { clip-path: polygon(20% 20%, 80% 20%, 50% 60%); background: rgba(255,255,255,0.8); }
+
+#shatter-overlay.crack .shard {
+    filter: contrast(1.4);
+    box-shadow: inset 0 0 25px rgba(0,0,0,0.8);
+}
+
+#shatter-overlay.fall .s1 { transform: translate(-180px, 500px) rotate(-35deg) scale(0.7); opacity: 0; }
+#shatter-overlay.fall .s2 { transform: translate(200px, 550px) rotate(40deg) scale(0.7); opacity: 0; }
+#shatter-overlay.fall .s3 { transform: translate(-220px, 700px) rotate(-50deg) scale(0.6); opacity: 0; }
+#shatter-overlay.fall .s4 { transform: translate(240px, 680px) rotate(45deg) scale(0.6); opacity: 0; }
+#shatter-overlay.fall .s5 { transform: translate(0px, 800px) rotate(15deg) scale(0.5); opacity: 0; }
+#shatter-overlay.fall .s6 { transform: translate(0px, -400px) rotate(85deg) scale(0.2); opacity: 0; }
+
+/* ==========================================
+   FASE 2: PANTALLA NEGRA Y REGALO QUE EXPLOTA (MEJORADO)
+=========================================== */
+#scene-2 {
+    background: radial-gradient(circle at center, #1a091e 0%, #050208 70%, #000000 100%);
+    z-index: 20;
+    overflow: hidden;
+}
+
+/* Rayos de energía giratorios detrás del regalo */
+.energy-aura {
+    position: absolute;
+    width: 650px;
+    height: 650px;
+    background: conic-gradient(
+        from 0deg,
+        transparent 0deg 20deg,
+        rgba(255, 107, 139, 0.18) 20deg 40deg,
+        transparent 40deg 60deg,
+        rgba(255, 232, 158, 0.15) 60deg 80deg,
+        transparent 80deg 100deg,
+        rgba(255, 107, 139, 0.18) 100deg 120deg,
+        transparent 120deg 140deg,
+        rgba(255, 232, 158, 0.15) 140deg 160deg,
+        transparent 160deg 180deg,
+        rgba(255, 107, 139, 0.18) 180deg 200deg,
+        transparent 200deg 220deg,
+        rgba(255, 232, 158, 0.15) 220deg 240deg,
+        transparent 240deg 260deg,
+        rgba(255, 107, 139, 0.18) 260deg 280deg,
+        transparent 280deg 300deg,
+        rgba(255, 232, 158, 0.15) 300deg 320deg,
+        transparent 320deg 340deg,
+        rgba(255, 107, 139, 0.18) 340deg 360deg
+    );
+    border-radius: 50%;
+    mask-image: radial-gradient(circle, rgba(0,0,0,1) 20%, rgba(0,0,0,0) 70%);
+    -webkit-mask-image: radial-gradient(circle, rgba(0,0,0,1) 20%, rgba(0,0,0,0) 70%);
+    animation: rotateAura 12s linear infinite, pulseAura 1.5s ease-in-out infinite alternate;
+    pointer-events: none;
+}
+
+@keyframes rotateAura {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@keyframes pulseAura {
+    from { scale: 0.85; opacity: 0.7; }
+    to { scale: 1.15; opacity: 1; }
+}
+
+.gift-wrapper {
+    position: relative;
+    z-index: 5;
+    text-align: center;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    animation: emergeGift 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.open-label {
+    font-family: 'Fredoka One', cursive;
+    font-size: clamp(2.8rem, 7vw, 4.5rem);
+    color: #ffffff;
+    text-shadow: 0 0 15px #ff2e63, 0 0 35px #ff2e63, 0 4px 0 #3a2229;
+    margin-bottom: 2.5rem;
+    letter-spacing: 3px;
+    animation: labelBounce 0.8s infinite alternate;
+}
+
+@keyframes labelBounce {
+    from { transform: translateY(0) scale(1); }
+    to { transform: translateY(-10px) scale(1.08); }
+}
+
+/* CAJA DE REGALO CONSTRUIDA EN CSS */
+.custom-gift {
+    position: relative;
+    width: 190px;
+    height: 180px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    animation: unstableBox 0.45s infinite;
+}
+
+/* Tapa del regalo */
+.gift-lid {
+    position: absolute;
+    top: 22px;
+    width: 210px;
+    height: 46px;
+    background: linear-gradient(135deg, #ff7597 0%, #ff3f6c 100%);
+    border: 4px solid #2d141c;
+    border-radius: 10px;
+    z-index: 4;
+    box-shadow: 0 6px 0 rgba(0,0,0,0.35), 0 0 25px rgba(255, 63, 108, 0.6);
+    display: flex;
+    justify-content: center;
+    /* La tapa salta intentando contener la explosión */
+    animation: lidPressure 0.9s infinite;
+    transition: transform 0.6s cubic-bezier(0.2, 0.9, 0.3, 1.2), opacity 0.5s;
+}
+
+.lid-ribbon {
+    width: 38px;
+    height: 100%;
+    background: linear-gradient(90deg, #ffd32a, #fff200, #ffd32a);
+    border-left: 3px solid #2d141c;
+    border-right: 3px solid #2d141c;
+}
+
+/* Lazo / Moño superior */
+.gift-bow {
+    position: absolute;
+    top: -36px;
+    width: 110px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+.bow-loop {
+    width: 48px;
+    height: 36px;
+    background: #ffd32a;
+    border: 4px solid #2d141c;
+    border-radius: 50% 50% 10% 50%;
+    box-shadow: inset 0 -4px 0 #e1b12c;
+}
+
+.bow-loop.left {
+    transform: rotate(-20deg) translateX(8px);
+}
+
+.bow-loop.right {
+    border-radius: 50% 50% 50% 10%;
+    transform: rotate(20deg) translateX(-8px);
+}
+
+.bow-knot {
+    position: absolute;
+    bottom: -4px;
+    width: 26px;
+    height: 24px;
+    background: #fff200;
+    border: 4px solid #2d141c;
+    border-radius: 8px;
+    z-index: 2;
+}
+
+/* Luz intensa que sale del interior de la caja */
+.gift-inner-glow {
+    position: absolute;
+    top: 48px;
+    width: 165px;
+    height: 35px;
+    background: #ffffff;
+    border-radius: 50%;
+    filter: blur(8px);
+    box-shadow: 
+        0 0 30px 15px #ffffff,
+        0 0 60px 30px #ff2e63,
+        0 -25px 50px 20px #ffe89e;
+    z-index: 2;
+    animation: innerGlowPulse 0.9s infinite;
+    transition: all 0.5s ease;
+}
+
+/* Cuerpo de la caja */
+.gift-box-body {
+    position: relative;
+    width: 184px;
+    height: 125px;
+    background: linear-gradient(180deg, #ff3f6c 0%, #c9184a 100%);
+    border: 4px solid #2d141c;
+    border-radius: 0 0 14px 14px;
+    z-index: 3;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    box-shadow: 0 0 35px rgba(255, 46, 99, 0.7);
+    transition: transform 0.5s ease, filter 0.5s ease;
+}
+
+.box-ribbon {
+    width: 38px;
+    height: 100%;
+    background: linear-gradient(90deg, #e1b12c, #ffd32a, #e1b12c);
+    border-left: 3px solid #2d141c;
+    border-right: 3px solid #2d141c;
+}
+
+/* Grietas luminosas en la caja */
+.light-crack {
+    position: absolute;
+    background: #fff;
+    box-shadow: 0 0 12px 3px #fff, 0 0 20px 6px #ffd32a;
+    opacity: 0.85;
+    animation: crackFlicker 0.3s infinite alternate;
+}
+
+.crack-1 {
+    width: 4px;
+    height: 45px;
+    top: 15px;
+    left: 28px;
+    transform: rotate(25deg);
+    border-radius: 50%;
+}
+
+.crack-2 {
+    width: 4px;
+    height: 55px;
+    bottom: 12px;
+    right: 32px;
+    transform: rotate(-32deg);
+    border-radius: 50%;
+}
+
+.gift-shadow {
+    position: absolute;
+    bottom: -18px;
+    width: 170px;
+    height: 22px;
+    background: rgba(255, 46, 99, 0.45);
+    filter: blur(8px);
+    border-radius: 50%;
+}
+
+/* Chispas mágicas flotando alrededor */
+.sparks span {
+    position: absolute;
+    color: #ffe89e;
+    font-size: 1.6rem;
+    text-shadow: 0 0 10px #ffd32a, 0 0 20px #ff2e63;
+    animation: sparkFloat 1.2s infinite ease-out;
+}
+
+.sparks span:nth-child(1) { top: -15px; left: -35px; animation-delay: 0s; }
+.sparks span:nth-child(2) { top: 20px; right: -45px; animation-delay: 0.3s; }
+.sparks span:nth-child(3) { bottom: 30px; left: -40px; animation-delay: 0.6s; }
+.sparks span:nth-child(4) { top: -25px; right: -25px; animation-delay: 0.9s; }
+
+@keyframes sparkFloat {
+    0% { transform: translateY(0) scale(0.5); opacity: 0; }
+    50% { opacity: 1; }
+    100% { transform: translateY(-40px) scale(1.3); opacity: 0; }
+}
+
+.tap-hint {
+    color: #ffd32a;
+    margin-top: 2.2rem;
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-shadow: 0 0 10px rgba(255, 211, 42, 0.6);
+}
+
+/* ANIMACIONES DE PRESIÓN ANTES DE EXPLOTAR */
+@keyframes lidPressure {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    30% { transform: translateY(-18px) rotate(-6deg); }
+    60% { transform: translateY(-8px) rotate(5deg); }
+    80% { transform: translateY(-22px) rotate(-4deg); }
+}
+
+@keyframes innerGlowPulse {
+    0%, 100% { opacity: 0.4; transform: scale(0.8); }
+    30%, 80% { opacity: 1; transform: scale(1.25); }
+}
+
+@keyframes unstableBox {
+    0% { transform: translate(0, 0) scale(1, 1); }
+    25% { transform: translate(-5px, 3px) scale(1.06, 0.94); }
+    50% { transform: translate(5px, -4px) scale(0.95, 1.06); }
+    75% { transform: translate(-4px, -2px) scale(1.04, 0.96); }
+    100% { transform: translate(0, 0) scale(1, 1); }
+}
+
+@keyframes crackFlicker {
+    from { opacity: 0.4; transform: scaleY(0.8) rotate(25deg); }
+    to { opacity: 1; transform: scaleY(1.2) rotate(25deg); }
+}
+
+@keyframes emergeGift {
+    0% { transform: scale(0) rotate(-15deg); opacity: 0; }
+    100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+/* ==========================================
+   CLASES CUANDO EL USUARIO HACE CLIC Y EXPLOTA
+=========================================== */
+/* Fase A: Sobrecarga inminente */
+.custom-gift.charging {
+    animation: violentCharge 0.08s infinite !important;
+}
+
+@keyframes violentCharge {
+    0% { transform: translate(-8px, -6px) scale(1.12); filter: brightness(1.5); }
+    50% { transform: translate(8px, 6px) scale(0.92); filter: brightness(2.2); }
+    100% { transform: translate(-6px, 8px) scale(1.15); filter: brightness(1.8); }
+}
+
+/* Fase B: La tapa vuela y el regalo estalla */
+.custom-gift.detonate .gift-lid {
+    animation: none !important;
+    transform: translateY(-420px) translateX(90px) rotate(65deg) scale(1.4) !important;
+    opacity: 0;
+}
+
+.custom-gift.detonate .gift-inner-glow {
+    animation: none !important;
+    transform: scale(12) !important;
+    opacity: 1 !important;
+}
+
+.custom-gift.detonate .gift-box-body {
+    transform: scale(1.6, 0.5) translateY(40px);
+    filter: brightness(4);
+    opacity: 0;
+}
+
+/* Onda expansiva circular */
+.shockwave {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 18px solid #ffffff;
+    box-shadow: 0 0 50px #ff2e63, inset 0 0 50px #ffd32a;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 30;
+}
+
+.shockwave.boom {
+    animation: shockwaveExpand 0.75s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+}
+
+@keyframes shockwaveExpand {
+    0% { transform: scale(0.2); opacity: 1; border-width: 35px; }
+    100% { transform: scale(28); opacity: 0; border-width: 1px; }
+}
+
+/* Destello de pantalla completa */
+.explosion-flash {
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(circle, #ffffff 30%, #ffe0e9 100%);
+    z-index: 200;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.35s ease-in;
+}
+
+.explosion-flash.flash-on {
+    opacity: 1;
+}
+
+.explosion-flash.flash-fade {
+    opacity: 0;
+    transition: opacity 1.1s ease-out;
+}
+
+/* ==========================================
+   FASE 3: DISEÑO DEL VIDEO (FONDO Y ELEMENTOS)
+=========================================== */
+#scene-3 {
+    background-color: var(--pink-bg);
+    background-image: 
+        linear-gradient(var(--pink-grid) 1.5px, transparent 1.5px),
+        linear-gradient(90deg, var(--pink-grid) 1.5px, transparent 1.5px);
+    background-size: 28px 28px;
+    z-index: 15;
+    padding: 2rem;
+}
+
+/* Banderines de las esquinas superiores */
+.bunting {
+    position: absolute;
+    top: -10px;
+    display: flex;
+    gap: 6px;
+    z-index: 5;
+}
+
+.bunting-left {
+    left: -15px;
+    transform: rotate(-14deg);
+}
+
+.bunting-right {
+    right: -15px;
+    transform: rotate(14deg);
+}
+
+.bunting span {
+    width: 0;
+    height: 0;
+    border-left: 16px solid transparent;
+    border-right: 16px solid transparent;
+    border-top: 32px solid var(--pink-main);
+    filter: drop-shadow(0 2px 0 rgba(0,0,0,0.1));
+}
+
+.bunting span:nth-child(even) {
+    border-top-color: #f8a5ba;
+}
+
+/* Contenedor principal de 2 columnas */
+.main-stage {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    width: 100%;
+    max-width: 1050px;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.left-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    flex: 1;
+    min-width: 300px;
+}
+
+.title-wrapper {
+    position: relative;
+    margin-bottom: 1.5rem;
+}
+
+.word-happy, .word-birthday {
+    font-family: 'Fredoka One', cursive;
+    line-height: 1.05;
+    letter-spacing: 2px;
+    /* Borde grueso oscuro y sombra 3D como en el video */
+    -webkit-text-stroke: 2.5px var(--dark-outline);
+    text-shadow: 
+        3px 3px 0 var(--dark-outline),
+        -1px -1px 0 var(--dark-outline),
+        1px -1px 0 var(--dark-outline),
+        -1px 1px 0 var(--dark-outline),
+        0 5px 0 var(--dark-outline);
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.word-happy {
+    font-size: clamp(3.2rem, 7vw, 5rem);
+    color: #ffffff;
+}
+
+.word-birthday {
+    font-size: clamp(3.4rem, 7.5vw, 5.4rem);
+    color: var(--pink-main);
+    position: relative;
+    display: inline-block;
+}
+
+.word-happy.show, .word-birthday.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Gorrito de fiesta sobre Birthday */
+.party-hat {
+    position: absolute;
+    top: -48px;
+    right: -18px;
+    width: 0;
+    height: 0;
+    border-left: 24px solid transparent;
+    border-right: 24px solid transparent;
+    border-bottom: 52px solid var(--dark-outline);
+    transform: rotate(28deg) scale(0);
+    transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.party-hat.show {
+    transform: rotate(28deg) scale(1);
+}
+
+.party-hat .pom-pom {
+    position: absolute;
+    top: -12px;
+    left: -8px;
+    width: 16px;
+    height: 16px;
+    background: var(--pink-main);
+    border: 2px solid var(--dark-outline);
+    border-radius: 50%;
+}
+
+/* Píldora de Fecha */
+.pill-date {
+    background-color: var(--pink-main);
+    color: var(--dark-outline);
+    font-weight: 700;
+    padding: 8px 36px;
+    border-radius: 50px;
+    border: 2.5px solid var(--dark-outline);
+    box-shadow: 0 4px 0 var(--dark-outline);
+    font-size: 1.05rem;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 1.4rem;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.pill-btn {
+    background-color: var(--pink-main);
+    color: #ffffff;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    padding: 10px 26px;
+    border-radius: 50px;
+    border: 2.5px solid var(--dark-outline);
+    box-shadow: 0 4px 0 var(--dark-outline);
+    cursor: pointer;
+    transition: transform 0.2s, background-color 0.2s;
+}
+
+.pill-btn:hover {
+    transform: scale(1.07);
+    background-color: var(--pink-dark);
+}
+
+.cake-trigger-btn {
+    background-color: #ff9a3c;
+}
+
+.cake-trigger-btn:hover {
+    background-color: #e88223;
+}
+
+/* Columna Derecha: Panda y Globos */
+.right-col {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    min-width: 280px;
+}
+
+.character-wrapper {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.avatar-circle {
+    width: clamp(220px, 30vw, 290px);
+    height: clamp(220px, 30vw, 290px);
+    border-radius: 50%;
+    background-color: #fff;
+    border: 14px solid var(--yellow-ring);
+    outline: 2.5px solid var(--dark-outline);
+    box-shadow: 0 8px 0 rgba(0,0,0,0.08);
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    position: relative;
+    z-index: 2;
+}
+
+.avatar-circle img {
+    width: 90%;
+    height: 90%;
+    object-fit: contain;
+}
+
+.panda-fallback {
+    display: none;
+    font-size: 8.5rem;
+    line-height: 1;
+    margin-bottom: 10px;
+}
+
+.pill-dear {
+    background-color: var(--pink-main);
+    color: #fff;
+    font-family: 'Dancing Script', cursive;
+    font-size: 1.35rem;
+    padding: 4px 42px;
+    border-radius: 50px;
+    border: 2.5px solid var(--dark-outline);
+    box-shadow: 0 3px 0 var(--dark-outline);
+    margin-top: -16px;
+    z-index: 3;
+}
+
+/* Globos animados alrededor del círculo */
+.balloon {
+    position: absolute;
+    background-color: var(--pink-main);
+    border: 2.5px solid var(--dark-outline);
+    border-radius: 50%;
+    z-index: 3;
+    animation: floatBalloon 3.5s ease-in-out infinite alternate;
+}
+
+.balloon::after {
+    content: '';
+    position: absolute;
+    bottom: -25px;
+    left: 50%;
+    width: 2px;
+    height: 25px;
+    background: var(--dark-outline);
+}
+
+.b-left {
+    width: 48px;
+    height: 56px;
+    top: -10px;
+    left: -15px;
+}
+
+.b-right-top {
+    width: 68px;
+    height: 76px;
+    top: 10px;
+    right: -25px;
+    animation-delay: 0.7s;
+}
+
+.b-right-bottom {
+    width: 50px;
+    height: 58px;
+    bottom: 20px;
+    right: -35px;
+    animation-delay: 1.4s;
+}
+
+@keyframes floatBalloon {
+    0% { transform: translateY(0) rotate(-4deg); }
+    100% { transform: translateY(-12px) rotate(4deg); }
+}
+
+.pop-item {
+    opacity: 0;
+    transform: scale(0.6);
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.pop-item.show {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.deco-star {
+    position: absolute;
+    color: var(--dark-outline);
+    font-size: 1.2rem;
+    animation: pulseGlow 1.5s infinite alternate;
+}
+
+/* ==========================================
+   MODALES GENERALES Y DIARIO 3D (4 HOJAS)
+=========================================== */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.72);
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    animation: fadeIn 0.3s ease;
+}
+
+.close-modal-btn {
+    position: absolute;
+    top: 20px;
+    right: 25px;
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 2rem;
+    cursor: pointer;
+    z-index: 110;
+    transition: transform 0.2s;
+}
+
+.close-modal-btn:hover {
+    transform: scale(1.2);
+}
+
+/* Libro 3D */
+.diary-container {
+    perspective: 1600px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.book {
+    position: relative;
+    width: 320px;
+    height: 460px;
+    transform-style: preserve-3d;
+    transition: transform 0.8s ease;
+}
+
+/* Cuando el libro se abre en pantallas grandes se centra el pliego */
+@media (min-width: 720px) {
+    .book.open {
+        transform: translateX(160px);
+    }
+}
+
+.book-cover {
+    position: absolute;
+    inset: 0;
+    transform-origin: left center;
+    transform-style: preserve-3d;
+    transition: transform 1s cubic-bezier(0.645, 0.045, 0.355, 1);
+    z-index: 5;
+}
+
+.book.open .book-cover {
+    transform: rotateY(-180deg);
+}
+
+@media (max-width: 719px) {
+    /* En pantallas de celular, abrimos la portada completamente hacia atrás para leer cómodamente */
+    .book.open .book-cover {
+        transform: rotateY(-180deg);
+        opacity: 0;
+        pointer-events: none;
+    }
+}
+
+.cover-front, .cover-back {
+    position: absolute;
+    inset: 0;
+    background-color: var(--card-red);
+    border: 3px solid var(--dark-outline);
+    border-radius: 6px 14px 14px 6px;
+    backface-visibility: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    padding: 1.5rem;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.35);
+}
+
+.cover-back {
+    transform: rotateY(180deg);
+    border-radius: 14px 6px 6px 14px;
+}
+
+/* En la cara trasera las letras se ven en espejo igual que en el video */
+.cover-back .cover-title, .cover-back .cover-sub {
+    transform: scaleX(-1);
+}
+
+.cover-badge {
+    width: 65px;
+    height: 65px;
+    background: #fff;
+    border-radius: 50%;
+    border: 2.5px solid var(--dark-outline);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2.3rem;
+    margin-bottom: 1rem;
+}
+
+.cover-sub {
+    font-family: 'Dancing Script', cursive;
+    font-size: 1.3rem;
+    margin-bottom: 0.4rem;
+}
+
+.cover-title {
+    font-family: 'Fredoka One', cursive;
+    font-size: 2.2rem;
+    text-align: center;
+    line-height: 1.15;
+    letter-spacing: 1px;
+}
+
+.cover-cat {
+    font-size: 3.5rem;
+    margin-top: auto;
+    animation: bounceCat 0.8s infinite alternate;
+}
+
+@keyframes bounceCat {
+    from { transform: translateY(0); }
+    to { transform: translateY(-8px); }
+}
+
+/* Interior de las 4 hojas */
+.book-inside {
+    position: absolute;
+    inset: 0;
+    background-color: var(--card-red);
+    border: 3px solid var(--dark-outline);
+    border-radius: 6px 14px 14px 6px;
+    padding: 1.2rem;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+}
+
+.diary-page {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    animation: fadeIn 0.4s ease;
+}
+
+.diary-page.active {
+    display: flex;
+}
+
+.page-header {
+    font-family: 'Dancing Script', cursive;
+    font-size: 1.6rem;
+    margin-bottom: 0.6rem;
+}
+
+.photo-frame {
+    width: 100%;
+    height: 185px;
+    background: #fff;
+    padding: 6px;
+    border-radius: 8px;
+    border: 2px solid var(--dark-outline);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    margin-bottom: 0.8rem;
+}
+
+.photo-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.page-text {
+    font-size: 0.92rem;
+    line-height: 1.45;
+    text-align: left;
+    background: rgba(255, 255, 255, 0.14);
+    padding: 10px;
+    border-radius: 8px;
+    width: 100%;
+    flex: 1;
+    overflow-y: auto;
+}
+
+.page-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 0.7rem;
+    padding-top: 0.5rem;
+    border-top: 1px dashed rgba(255,255,255,0.4);
+}
+
+.nav-page-btn {
+    background: #fff;
+    color: var(--card-red);
+    border: 2px solid var(--dark-outline);
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 0.82rem;
+    cursor: pointer;
+}
+
+.nav-page-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+#page-indicator {
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+
+/* ==========================================
+   MODAL 2: CONSTRUCCIÓN DEL PASTEL
+=========================================== */
+.cake-stage {
+    background: #fff5f8;
+    border: 4px solid var(--dark-outline);
+    border-radius: 24px;
+    padding: 2rem;
+    max-width: 480px;
+    width: 95%;
+    text-align: center;
+    box-shadow: 0 10px 0 var(--dark-outline);
+}
+
+.cake-title {
+    font-family: 'Fredoka One', cursive;
+    color: var(--pink-main);
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+}
+
+.cake-builder {
+    height: 210px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+
+/* Capas del pastel (ocultas inicialmente) */
+.cake-builder > div {
+    opacity: 0;
+    transform: translateY(-25px) scale(0.8);
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.cake-builder > div.built {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+.cake-plate {
+    width: 220px;
+    height: 12px;
+    background: #d1d8e0;
+    border: 2.5px solid var(--dark-outline);
+    border-radius: 10px;
+}
+
+.cake-tier-bottom {
+    width: 180px;
+    height: 48px;
+    background: #ff85a2;
+    border: 2.5px solid var(--dark-outline);
+    border-bottom: none;
+    border-radius: 8px 8px 0 0;
+}
+
+.cake-tier-middle {
+    width: 140px;
+    height: 44px;
+    background: #ffacc5;
+    border: 2.5px solid var(--dark-outline);
+    border-bottom: none;
+    border-radius: 8px 8px 0 0;
+}
+
+.cake-tier-top {
+    width: 100px;
+    height: 40px;
+    background: #ffd1dc;
+    border: 2.5px solid var(--dark-outline);
+    border-bottom: none;
+    border-radius: 8px 8px 0 0;
+}
+
+.cake-top-frosting {
+    width: 104px;
+    height: 14px;
+    background: #fff;
+    border: 2.5px solid var(--dark-outline);
+    border-radius: 20px;
+    margin-bottom: -8px;
+    z-index: 2;
+}
+
+.cake-candle {
+    width: 14px;
+    height: 35px;
+    background: repeating-linear-gradient(45deg, #fff, #fff 5px, #4cd137 5px, #4cd137 10px);
+    border: 2px solid var(--dark-outline);
+    margin-bottom: -4px;
+    z-index: 1;
+}
+
+.cake-flame {
+    width: 16px;
+    height: 24px;
+    background: #fbc531;
+    border-radius: 50% 50% 35% 35%;
+    box-shadow: 0 0 15px #fbc531, 0 0 30px #e1b12c;
+    margin-bottom: 2px;
+    animation: flicker 0.4s infinite alternate;
+}
+
+@keyframes flicker {
+    from { transform: scale(1) rotate(-3deg); }
+    to { transform: scale(1.12) rotate(3deg); }
+}
+
+.cake-msg-text {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--dark-outline);
+    min-height: 55px;
+    margin-bottom: 1rem;
+}
+
+.pulse-btn {
+    animation: pulseGlow 0.9s infinite alternate;
+}
+
+/* ==========================================
+   MODAL 3: CARTA FINAL Y BOTÓN WHATSAPP
+=========================================== */
+.final-card {
+    background: #ffffff;
+    border: 4px solid var(--dark-outline);
+    border-radius: 24px;
+    padding: 2.2rem 1.8rem;
+    max-width: 500px;
+    width: 95%;
+    text-align: center;
+    box-shadow: 0 10px 0 var(--dark-outline);
+    animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.final-icon {
+    font-size: 3rem;
+    margin-bottom: 0.8rem;
+}
+
+.final-card h3 {
+    font-family: 'Fredoka One', cursive;
+    color: var(--pink-main);
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+}
+
+.final-letter {
+    font-size: 1.05rem;
+    line-height: 1.6;
+    color: var(--dark-outline);
+    margin-bottom: 1.2rem;
+}
+
+.whatsapp-btn {
+    display: inline-block;
+    background-color: #25D366;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1.15rem;
+    padding: 14px 28px;
+    border-radius: 50px;
+    border: 3px solid var(--dark-outline);
+    box-shadow: 0 5px 0 var(--dark-outline);
+    margin-bottom: 1.2rem;
+    transition: transform 0.2s;
+}
+
+.whatsapp-btn:hover {
+    transform: scale(1.06);
+    background-color: #1ebe5d;
+}
+
+.final-ps {
+    font-size: 0.95rem;
+    background: #fff0f3;
+    padding: 12px;
+    border-radius: 12px;
+    border: 2px dashed var(--pink-main);
+}
+
+@keyframes popIn {
+    from { transform: scale(0.7); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}

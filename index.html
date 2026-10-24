@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para ti ✨</title>
+    <!-- Fuentes de Google para replicar la estética del video -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Quicksand:wght@500;700&family=Dancing+Script:wght@700&family=Caveat:wght@600&display=swap" rel="stylesheet">
+    <!-- Librería Canvas Confetti para lanzar serpentinas -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/upgrade.css">
+    <link rel="stylesheet" href="css/polish.css">
+</head>
+<body>
+    <canvas id="warp"></canvas>
+
+    <!-- ==========================================
+         FASE 1: LA BROMA INICIAL
+    =========================================== -->
+    <section id="scene-1" class="scene active">
+        <div class="intro-box">
+            <h1 id="question-text">¿Preparada para tu regalo? 🎁</h1>
+            <div id="buttons-container" class="btn-group">
+                <button id="btn-yes" class="btn-primary">¡Por supuesto!</button>
+                <button id="btn-no" class="btn-secondary">No, gracias.</button>
+            </div>
+
+            <div id="joke-response" class="hidden">
+                <h2 id="joke-text"></h2>
+                <img id="joke-gif" src="assets/img/broma.gif" alt="Broma" class="hidden" onerror="this.src='https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3Z0b3h5b2R4eHBoZ2R6bm15c3B3ZnZ4eG56Z2Z5eCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/l0MYt5jPR6QX5pnqM/giphy.gif'">
+            </div>
+        </div>
+    </section>
+
+    <!-- CAPA DE RUPTURA DE PANTALLA (Cristales que se rompen) -->
+    <div id="shatter-overlay" class="hidden">
+        <div class="shard s1"></div>
+        <div class="shard s2"></div>
+        <div class="shard s3"></div>
+        <div class="shard s4"></div>
+        <div class="shard s5"></div>
+        <div class="shard s6"></div>
+    </div>
+
+    <!-- ==========================================
+         FASE 2: EL REGALO GIGANTE EN PANTALLA NEGRA (MEJORADO)
+    =========================================== -->
+    <section id="scene-2" class="scene hidden">
+        <!-- Rayos de energía de fondo -->
+        <div class="energy-aura"></div>
+        
+        <!-- Onda expansiva al explotar -->
+        <div id="shockwave" class="shockwave"></div>
+
+        <div class="gift-wrapper" id="giant-gift-trigger">
+            <h2 class="open-label" id="open-label-text">¡Ábrelo!</h2>
+
+            <!-- Contenedor del Regalo en Capas -->
+            <div class="custom-gift" id="custom-gift">
+                <!-- Partículas de energía escapando -->
+                <div class="sparks">
+                    <span>✦</span><span>★</span><span>✦</span><span>★</span>
+                </div>
+
+                <!-- Tapa del regalo (sale volando al abrir) -->
+                <div class="gift-lid">
+                    <div class="gift-bow">
+                        <div class="bow-loop left"></div>
+                        <div class="bow-loop right"></div>
+                        <div class="bow-knot"></div>
+                    </div>
+                    <div class="lid-ribbon"></div>
+                </div>
+
+                <!-- Luz interior que escapa cuando la tapa salta -->
+                <div class="gift-inner-glow"></div>
+
+                <!-- Cuerpo de la caja -->
+                <div class="gift-box-body">
+                    <div class="box-ribbon"></div>
+                    <!-- Grietas de luz de que va a explotar -->
+                    <div class="light-crack crack-1"></div>
+                    <div class="light-crack crack-2"></div>
+                </div>
+                
+                <!-- Sombra del regalo -->
+                <div class="gift-shadow"></div>
+            </div>
+
+            <p class="tap-hint" id="tap-hint-text">⚡ ¡Tócalo rápido, está por estallar! ⚡</p>
+        </div>
+    </section>
+
+    <!-- Destello blanco de transición de la explosión -->
+    <div id="explosion-flash" class="explosion-flash hidden"></div>
+
+    <!-- ==========================================
+         FASE 3: PANTALLA PRINCIPAL (RÉPLICA DEL VIDEO)
+    =========================================== -->
+    <section id="scene-3" class="scene hidden">
+        <!-- Banderines superiores de las esquinas -->
+        <div class="bunting bunting-left">
+            <span></span><span></span><span></span><span></span><span></span><span></span>
+        </div>
+        <div class="bunting bunting-right">
+            <span></span><span></span><span></span><span></span><span></span><span></span>
+        </div>
+
+        <div class="main-stage">
+            <!-- Columna Izquierda: Título y Botones -->
+            <div class="left-col">
+                <div class="title-wrapper">
+                    <div class="word-happy" id="anim-happy">Happy</div>
+                    <div class="word-birthday" id="anim-birthday">
+                        Birthday
+                        <!-- Gorrito de fiesta sobre la última letra -->
+                        <div class="party-hat" id="anim-hat">
+                            <div class="pom-pom"></div>
+                        </div>
+                    </div>
+
+                    <!-- Letrero neón: más pequeño y con luces que parecen a punto de quemarse -->
+                    <div class="neon-sign" id="anim-neon" role="img" aria-label="Pendeja N°1">
+                        <span class="neon-text" aria-hidden="true"><span class="nl">P</span><span class="nl weak w1">e</span><span class="nl">n</span><span class="nl">d</span><span class="nl">e</span><span class="nl weak w2">j</span><span class="nl">a</span><span class="nl"> </span><span class="nl">N</span><span class="nl">°</span><span class="nl weak w3">1</span></span>
+                    </div>
+                </div>
+
+                <!-- Fecha de cumpleaños -->
+                <div class="pill-date pop-item" id="anim-date">
+                    <span>★</span> <span id="birthday-date-text">25 Oct</span> <span>★</span>
+                </div>
+
+                <!-- Botones de acción: Abrir Diario y Abrir Pastel -->
+                <div class="action-buttons pop-item" id="anim-buttons">
+                    <button id="btn-open-diary" class="pill-btn">
+                        Para ti 💌
+                    </button>
+                    <button id="btn-open-cake" class="pill-btn cake-trigger-btn">
+                        Tu obsequio 🎂
+                    </button>
+                </div>
+            </div>
+
+            <!-- Columna Derecha: Panda y Globos -->
+            <div class="right-col">
+                <div class="character-wrapper pop-item" id="anim-char">
+                    <!-- Globos flotantes -->
+                    <div class="balloon b-left"></div>
+                    <div class="balloon b-right-top"></div>
+                    <div class="balloon b-right-bottom"></div>
+
+                    <!-- Círculo con el personaje -->
+                    <div class="avatar-circle">
+                        <img src="assets/img/panda.png" alt="Personaje" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <!-- Respaldo visual automático si aún no pones panda.png -->
+                        <div class="panda-fallback">🐼</div>
+                    </div>
+
+                    <div class="pill-dear">Dear You</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Decoración flotante sutil -->
+        <span class="deco-star" style="top: 18%; left: 45%;">✦</span>
+        <span class="deco-star" style="bottom: 15%; left: 10%;">✦</span>
+        <span class="deco-star" style="top: 30%; right: 8%;">✦</span>
+    </section>
+
+    <!-- ==========================================
+         MODAL 1: DIARIO 3D DE 4 HOJAS CON FOTOS
+    =========================================== -->
+    <div id="diary-modal" class="modal-overlay hidden">
+        <button id="btn-close-diary" class="close-modal-btn">✕</button>
+
+        <div class="diary-container">
+            <div class="book" id="book">
+                <!-- Portada izquierda (se abre en 3D como en el video) -->
+                <div class="book-cover" id="book-cover">
+                    <div class="cover-front">
+                        <div class="cover-badge">🐼</div>
+                        <p class="cover-sub">To You! ❤️</p>
+                        <h3 class="cover-title">HAPPY<br>BIRTHDAY</h3>
+                        <div class="cover-cat">🐱</div>
+                    </div>
+                    <div class="cover-back">
+                        <div class="cover-badge">🐼</div>
+                        <p class="cover-sub">To You! ❤️</p>
+                        <h3 class="cover-title">HAPPY<br>BIRTHDAY</h3>
+                        <div class="cover-cat">🐱</div>
+                    </div>
+                </div>
+
+                <!-- Interior derecha: las 4 páginas del diario -->
+                <div class="book-inside">
+                    <!-- HOJA 1 -->
+                    <div class="diary-page active" data-page="1">
+                        <h4 class="page-header">Locuras y golpes 🧗‍♀️</h4>
+                        <div class="photo-frame">
+                            <img src="assets/img/foto1.jpg" alt="Foto 1" onerror="this.src='https://images.unsplash.com/photo-1513151233558-d860c5398176?w=500&auto=format&fit=crop&q=60'">
+                        </div>
+                        <p class="page-text">
+                            Viendo la foto, el casco nos queda perfecto. A ti por lo pendeja y torpe que puedes llegar a ser, y a mí para protegerme de tus golpes “de la nada” porque para ti soy alguien “golpeable” jajaja 🤕. Pero hablando en serio... me encanta esa energía tuya de querer explorar el mundo y espero que nunca la olvides. 
+                        </p>
+                    </div>
+
+                    <!-- HOJA 2 -->
+                    <div class="diary-page" data-page="2">
+                        <h4 class="page-header">Siempre de últimos ⛰️</h4>
+                        <div class="photo-frame">
+                            <img src="assets/img/foto2.jpg" alt="Foto 2" onerror="this.src='https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=500&auto=format&fit=crop&q=60'">
+                        </div>
+                        <p class="page-text">
+                            Las veces que llegamos a salir a caminar, la historia casi siempre era la misma: nos tocaba quedarnos al último porque a “alguien” le gustaba caminar muy lento 🐢, y “lastimosamente” yo era el daño colateral jajajaja. Pero ¿sabes qué? No me importa quedarme atrás, porque admiro cómo, a tu ritmo y con paciencia, siempre logras llegar a la meta.
+                        </p>
+                    </div>
+
+                    <!-- HOJA 3 -->
+                    <div class="diary-page" data-page="3">
+                        <h4 class="page-header">Aquellos tiempos ✨</h4>
+                        <div class="photo-frame">
+                            <img src="assets/img/foto3.jpg" alt="Foto 3" onerror="this.src='https://images.unsplash.com/photo-1464349153735-7db50ed83c84?w=500&auto=format&fit=crop&q=60'">
+                        </div>
+                        <p class="page-text">
+                            Quién diría en ese entonces que, después de graduarnos, pasarían 3 años enteros sin vernos. Qué bueno que a pesar de tanto tiempo, cuando nos volvimos a encontrar sentí que la confianza (y tus ganas de maltratarme 🥊) seguían exactamente igual que siempre 🫂.
+                        </p>
+                    </div>
+
+                    <!-- HOJA 4 -->
+                    <div class="diary-page" data-page="4">
+                        <h4 class="page-header">La Pendeja N°1 ⛺</h4>
+                        <div class="photo-frame">
+                            <img src="assets/img/foto4.jpg" alt="Foto 4" onerror="this.src='https://images.unsplash.com/photo-1527529482837-4698179dc6ce?w=500&auto=format&fit=crop&q=60'">
+                        </div>
+                        <p class="page-text">
+                            Y finalmente, llegó ese reencuentro inesperado donde me di cuenta de que hay cosas que no cambian... como tus ganas de siempre dar “ventaja” a los demás al subir montañas y cuidarlos desde atrás, desde muuuuuuuy atrás, junto conmigo 😒. Me alegró ver que mantienes tu determinación y, tal como el día de esta foto, a tu ritmo lograste llegar a pesar de que terminaste casi muerta. Quiero desearte lo mejor del mundo y recordarte algo: habrá cosas que nunca cambiarán, y una de ellas es servirte de apoyo cuando más lo necesites. ¡Feliz cumple, Pendeja N°1! 🎂💕
+                        </p>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    
+        <!-- Controles flotantes bajo el libro -->
+        <div class="page-controls">
+                        <button id="prev-page" class="nav-page-btn" disabled>⬅ Anterior</button>
+                        <span id="page-indicator">1 / 4</span>
+                        <button id="next-page" class="nav-page-btn">Siguiente ➔</button>
+                    </div>
+    </div>
+
+    <!-- ==========================================
+         MODAL 2 / FASE 4: EL PASTEL, MÚSICA Y SERPENTINAS
+    =========================================== -->
+    <div id="cake-modal" class="modal-overlay hidden">
+        <button id="btn-close-cake" class="close-modal-btn">✕</button>
+
+        <div class="cake-stage">
+            <h2 class="cake-title">¡Pide un deseo! 🎶</h2>
+
+            <!-- Pastel que se va armando por capas -->
+            <div class="cake-builder">
+                <div class="cake-flame" id="layer-flame"></div>
+                <div class="cake-candle" id="layer-candle"></div>
+                <div class="cake-top-frosting" id="layer-frosting"></div>
+                <div class="cake-tier-top" id="layer-top"></div>
+                <div class="cake-tier-middle" id="layer-middle"></div>
+                <div class="cake-tier-bottom" id="layer-bottom"></div>
+                <div class="cake-plate" id="layer-plate"></div>
+            </div>
+
+            <!-- Mensaje que se escribe mientras suena la canción -->
+            <p id="cake-message" class="cake-msg-text"></p>
+
+            <!-- Botón que aparece al terminar de armarse el pastel -->
+            <button id="btn-final-gift" class="btn-primary hidden pulse-btn">
+                Abrir regalo 🎁
+            </button>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         MODAL 3 / FASE 5: EL MENSAJE FINAL Y WHATSAPP
+    =========================================== -->
+    <div id="final-gift-modal" class="modal-overlay hidden">
+        <button id="btn-close-final" class="close-modal-btn">✕</button>
+
+        <div class="final-card">
+            <div class="final-icon">🏝️🍣🎁</div>
+            <h3>Tu Regalo Especial</h3>
+            <p class="final-letter">
+                Quisiera darte un regalo personalmente, como tú lo hiciste cuando nos volvimos a ver, pero está un <strong>"poquito"</strong> complicado porque a alguien se le ocurrió ir a vivir a una isla, así que, si algún día tienes antojo de algo (como sushi por ejemplo)...
+            </p>
+            
+            <!-- Enlace directo a tu WhatsApp -->
+            <a id="whatsapp-link" href="https://wa.me/593990144591?text=%C2%A1Hola!%20Vengo%20a%20reclamar%20mi%20antojo%20de%20cumplea%C3%B1os%20%F0%9F%8D%A3" target="_blank" class="whatsapp-btn">
+                Presiona aquí 🍣📲
+            </a>
+
+            <p class="final-letter">
+                ...y te haré llegar ese antojo.
+            </p>
+            <p class="final-ps">
+                <strong>Pdta:</strong> Cuando te vuelva a ver, si es que sucede, te daré tu regalo físico. ❤️
+            </p>
+        </div>
+    </div>
+
+    <!-- Audio de cumpleaños -->
+    <audio id="birthday-audio" src="assets/audio/cancion.mp3" preload="auto"></audio>
+
+    <script src="js/warp.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
