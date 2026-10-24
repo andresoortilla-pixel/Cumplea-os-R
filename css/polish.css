@@ -332,3 +332,17 @@ html, body { max-width: 100%; overflow-x: hidden; }
   .page-hint { display: none; }
   .left-page { gap: calc(var(--bw) * .06); }
 }
+
+/* ---- Celular: letra grande y hoja que se desliza hacia abajo ---- */
+@media (max-width: 719px) {
+  .book { --bw: min(300px, calc((100vw - 34px) / 2), calc((100dvh - 200px) / 2.3)); height: calc(var(--bw) * 2.3); transform: translateX(0) scale(1.4); }
+  .book.open { transform: translateX(calc(var(--bw) / 2)) scale(1); }
+  .photo-frame { height: calc(var(--bw) * .5); flex: none; }
+  .page-text { font-size: max(14.5px, calc(var(--bw) * .085)); line-height: 1.32; min-height: 0;
+    overflow-y: auto; touch-action: pan-y; overscroll-behavior: contain; -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin; scrollbar-color: #e46d8a transparent; }
+  .page-text.has-more { -webkit-mask-image: linear-gradient(#000 80%, transparent); mask-image: linear-gradient(#000 80%, transparent); }
+}
+
+/* permite deslizar la hoja hacia abajo (los gestos horizontales siguen siendo del libro) */
+#diary-modal, #diary-modal * { touch-action: pan-y; }
